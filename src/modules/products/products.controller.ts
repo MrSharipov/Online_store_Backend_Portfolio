@@ -1,11 +1,53 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/decorator';
+import { CreateProductsDto, UpdateProductsDto } from './dto';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductsService) {}
+
   @UseGuards(AuthGuard('jwt'))
-  @Get()
+  @Get('all')
   getAll() {
-    return 'Salom dunyo';
+    return this.productsService.getAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get(':id')
+  getById(@Param('id') productId: string, @GetUser('id') userId: string) {
+    return this.productsService.getById(userId, productId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  create(@Body() dto: CreateProductsDto, @GetUser('id') userId: string) {
+    return this.productsService.create(userId, dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Put(':id')
+  update(
+    @Param('id') productId: string,
+    @Body() dto: UpdateProductsDto,
+    @GetUser('id') userId: string,
+  ) {
+    return this.productsService.update(userId, productId, dto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  delete(@Param('id') productId, @GetUser('id') userId: string) {
+    return this.productsService.remove(userId, productId);
   }
 }

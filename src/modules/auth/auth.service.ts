@@ -36,7 +36,7 @@ export class AuthService {
     return this.getToken(user.id, user.email, user.name);
   }
 
-  getToken = async (userId: number, email: string, name: string) => {
+  getToken = async (userId: string, email: string, name: string) => {
     const payload = {
       sub: userId,
       email,
