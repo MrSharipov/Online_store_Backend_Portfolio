@@ -18,9 +18,9 @@ import { CreateCategoryDto, UpdateCategoryDto } from './dto';
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Get('all')
-  getAllProducts() {
+  getAll() {
     return this.categoriesService.getAllCategories();
   }
 

@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UpdateUserDto } from './dto';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class UsersService {
@@ -31,11 +32,13 @@ export class UsersService {
       },
     });
     if (!user) throw new ForbiddenException('User not found');
+    const hash = await argon2.hash(dto.hash);
     return this.prisma.user.update({
       where: {
         id: userId,
       },
       data: {
+        hash,
         ...dto,
       },
     });

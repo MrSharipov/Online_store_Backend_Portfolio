@@ -7,7 +7,11 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
 
   async getAllCategories() {
-    const categories = await this.prisma.categories.findMany({});
+    const categories = await this.prisma.categories.findMany({
+      include: {
+        Products: true,
+      },
+    });
 
     if (!categories) throw new ForbiddenException('Category not found');
     return categories;
@@ -39,7 +43,7 @@ export class CategoriesService {
         id: categoryId,
       },
     });
-    if (!category) throw new ForbiddenException('Category not found');
+    // if (!category) throw new ForbiddenException('Category not found');
     return this.prisma.categories.update({
       where: {
         id: categoryId,
@@ -56,7 +60,7 @@ export class CategoriesService {
         id: categoryId,
       },
     });
-    if (!category) throw new ForbiddenException('Category not found');
+    // if (!category) throw new ForbiddenException('Category not found');
     await this.prisma.categories.delete({
       where: {
         id: categoryId,
