@@ -6,10 +6,15 @@ import { CreateProductsDto, UpdateProductsDto } from './dto';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async getAll() {
-    const products = await this.prisma.products.findMany({});
+  async getAll(id: string) {
+    const products = await this.prisma.products.findMany({
+      where: {
+        userId: id,
+      },
+    });
 
     if (!products) throw new ForbiddenException('Product not found');
+
     return products;
   }
 

@@ -19,8 +19,8 @@ export class ProductsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('all')
-  getAll() {
-    return this.productsService.getAll();
+  getAll(@GetUser('id') id: string) {
+    return this.productsService.getAll(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
