@@ -17,8 +17,13 @@ import { ProductsService } from './products.service';
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
+  @Get(':id')
+  getAllProducts(@Param('id') productId: string) {
+    return this.productsService.getAllProducts(productId);
+  }
+
   @UseGuards(AuthGuard('jwt'))
-  @Get('all')
+  @Get('user/products')
   getAll(@GetUser('id') id: string) {
     return this.productsService.getAll(id);
   }
